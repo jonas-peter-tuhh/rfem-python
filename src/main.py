@@ -60,4 +60,5 @@ StaticAnalysisSett
 ings(1, '1. Ordnung', StaticAnalysisType.GEOMETRICALLY_LINEAR)
 
 # Schritt 10 Berechnung
+# todo debug
 Calculate_all()
