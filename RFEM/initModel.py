@@ -160,7 +160,8 @@ def insertSpaces(lst: list):
     return ' '.join(str(item) for item in lst)
 
 
-def Calculate_all(generateXmlSolverInput: bool = False, model=Model):
+def \
+        Calculate_all(generateXmlSolverInput: bool = False, model: object = Model) -> object:
     '''
     Calculates model.
     CAUTION: Don't use it in unit tests!
@@ -170,6 +171,7 @@ def Calculate_all(generateXmlSolverInput: bool = False, model=Model):
     Args:
     - generateXmlSolverInput: generate XML solver input
     '''
+    print('got here')
     model.clientModel.service.calculate_all(generateXmlSolverInput)
 
 

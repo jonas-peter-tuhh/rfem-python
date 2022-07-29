@@ -17,9 +17,12 @@ from RFEM.enums import *
 from RFEM.initModel import *
 from RFEM.BasicObjects.node import Node
 from RFEM.BasicObjects.material import Material
+from RFEM.BasicObjects.line import Line
 from RFEM.BasicObjects.section import Section
 from RFEM.BasicObjects.member import Member
 from RFEM.TypesForNodes.nodalSupport import *
+from RFEM.Loads.memberLoad import *
+from RFEM.Loads.lineLoad import *
 from RFEM.Loads.nodalLoad import *
 from RFEM.LoadCasesAndCombinations.staticAnalysisSettings import *
 from RFEM.LoadCasesAndCombinations.loadCase import *
@@ -29,36 +32,41 @@ Model(new_model=True, model_name='Einfeldträger Bernoulli')
 Model.clientModel.service.begin_modification('new')
 
 # Schritt 3 Knoten
-Node(1, 0, 0, 0)
-beam_length = 5
-Node(2, 1, 0, 0)
+Node(no=1, coordinate_X=0, coordinate_Y=0, coordinate_Z=0)
+length = 5.
+Node(no=2, coordinate_X=3, coordinate_Y=0, coordinate_Z=0)
 
 # Schritt 4 Querschnitt
-Section(1, 'IPE200')
+Section(1, 'IPE 200')
 
 # Schritt 5 Material
 Material(1, 'S235')
 
 # Schritt 6 Balken
-Member(1, 1, 2, 0.0, 1, 1)
+Member(no=1, start_node_no=1, end_node_no=2, rotation_angle=0.0, start_section_no=1, end_section_no=1)
 
 # Schritt 7 Knotenlager
-NodalSupport(1, '1', NodalSupportType.FIXED)
+NodalSupport(1, '1', NodalSupportType.HINGED)
+NodalSupport(2, '2', NodalSupportType.ROLLER_IN_X)
 
-# Schritt 8 Last
-LoadCase(1, 'LF1', [False])
+# Schritt 8 Lastfall
+LoadCase.StaticAnalysis(1, 'LF1', [False])
 
 # Schritt 9 Knotenlast
-load = 5
-NodalLoad(1, 1, '2', LoadDirectionType.LOAD_DIRECTION_GLOBAL_Z_OR_USER_DEFINED_W, load*1000)
+f = 5
+NodalLoad(no=1,
+          load_case_no=1,
+          nodes_no='2',
+          load_direction=LoadDirectionType.LOAD_DIRECTION_GLOBAL_Z_OR_USER_DEFINED_W,
+         magnitude=f*1000)
+
+#MemberLoad(1, magnitude=200)
 
 # Schritt 10 Analyseeinstellungen
-StaticAnalysisSett
-0,\
-
-
-ings(1, '1. Ordnung', StaticAnalysisType.GEOMETRICALLY_LINEAR)
+StaticAnalysisSettings(1, '1. Ordnung', StaticAnalysisType.GEOMETRICALLY_LINEAR)
 
 # Schritt 10 Berechnung
-# todo debug
 Calculate_all()
+
+#Schritt 12 Veränderungen beenden und speichern
+Model.clientModel.service.finish_modification()
