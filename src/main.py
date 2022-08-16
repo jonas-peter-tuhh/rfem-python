@@ -31,7 +31,7 @@ from RFEM.LoadCasesAndCombinations.loadCase import *
 Model(new_model=True, model_name='Einfeldträger Bernoulli')
 Model.clientModel.service.begin_modification('new')
 
-#Vorschleife
+#Forschleife
 for i in range(5):
 
 # Schritt 3 Knoten
